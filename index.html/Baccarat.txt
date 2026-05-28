@@ -1,0 +1,135 @@
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bot Baccarat</title>
+
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: gold;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .jogador {
+      background: #2196f3;
+      color: white;
+    }
+
+    .banca {
+      background: #e91e63;
+      color: white;
+    }
+
+    .empate {
+      background: #4caf50;
+      color: white;
+    }
+
+    .box {
+      margin-top: 20px;
+      background: #222;
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      min-width: 300px;
+    }
+
+    #historico {
+      margin-top: 20px;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BOT BACCARAT</h1>
+
+  <button class="jogador" onclick="addResultado('Jogador')">Jogador</button>
+  <button class="banca" onclick="addResultado('Banca')">Banca</button>
+  <button class="empate" onclick="addResultado('Empate')">Empate</button>
+
+  <div class="box">
+    <h2>Estatísticas</h2>
+
+    <p>Jogador: <span id="jogador">0</span></p>
+    <p>Banca: <span id="banca">0</span></p>
+    <p>Empate: <span id="empate">0</span></p>
+
+    <hr>
+
+    <p>Chance Jogador: <span id="chanceJogador">0%</span></p>
+    <p>Chance Banca: <span id="chanceBanca">0%</span></p>
+
+    <h3 id="sinal">Aguardando dados...</h3>
+  </div>
+
+  <div id="historico"></div>
+
+  <script>
+    let resultados = [];
+
+    function addResultado(resultado) {
+      resultados.push(resultado);
+      atualizar();
+    }
+
+    function atualizar() {
+      let jogador = resultados.filter(r => r === 'Jogador').length;
+      let banca = resultados.filter(r => r === 'Banca').length;
+      let empate = resultados.filter(r => r === 'Empate').length;
+
+      let total = jogador + banca;
+
+      let chanceJogador = total > 0
+        ? ((jogador / total) * 100).toFixed(1)
+        : 0;
+
+      let chanceBanca = total > 0
+        ? ((banca / total) * 100).toFixed(1)
+        : 0;
+
+      document.getElementById('jogador').innerText = jogador;
+      document.getElementById('banca').innerText = banca;
+      document.getElementById('empate').innerText = empate;
+
+      document.getElementById('chanceJogador').innerText = chanceJogador + '%';
+      document.getElementById('chanceBanca').innerText = chanceBanca + '%';
+
+      let sinal = 'Sem sinal';
+
+      if (chanceJogador > chanceBanca) {
+        sinal = 'Maior tendência: JOGADOR';
+      }
+
+      if (chanceBanca > chanceJogador) {
+        sinal = 'Maior tendência: BANCA';
+      }
+
+      document.getElementById('sinal').innerText = sinal;
+
+      document.getElementById('historico').innerHTML =
+        '<h3>Histórico</h3>' + resultados.join(' | ');
+    }
+  </script>
+
+</body>
+</html>
